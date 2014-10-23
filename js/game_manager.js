@@ -217,6 +217,7 @@ GameManager.prototype.move2 = function (direction) {
     if (!this.movesAvailable()) {
       this.over = true; // Game over!
     }
+	// UDI
 
     this.actuate();
   }
