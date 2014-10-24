@@ -45,7 +45,7 @@ GameManager.prototype.setup = function () {
   var previousState = this.storageManager.getGameState();
 
   // Reload the game from a previous game if present
-  if (previousState &&0) {
+  if (previousState &&0) { // Remove &&0 when ready to use cache again...
     this.grid        = new Grid(previousState.grid.size,
                                 previousState.grid.cells); // Reload grid
     this.score       = previousState.score;
@@ -116,21 +116,26 @@ GameManager.prototype.serialize = function () {
 GameManager.prototype.move = function (direction) {
   var self = this;
   
-  if (this.isGameTerminated()) return;
+  if (this.isGameTerminated()) return; // Needed?
   
   var vector     = self.getVector(direction);
   var positions = self.findFarthestPosition(self.curCell, vector);
   
-  // Check if move is available, otherwise return
-  if (self.positionsEqual(positions.farthest, positions.next)) return;
+  // Check if move is available, otherwise return - this code doesn't work. Need to halt key press...
+  if (positions.farthest.x === self.curCell.x && positions.farthest.y === self.curCell.y)
+	return;
 
   self.addBlock(positions.farthest);
   this.curCell = positions.farthest;
+  
+  this.curCell.previousPosition = positions.farthest; // REMOVE... temp
   
   self.score += 1;
 
   if (this.grid.availableCells().length == 0)
       self.won = true;
+  if (0)
+	self.over = true
 
   this.actuate();
 };
