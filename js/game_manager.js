@@ -69,12 +69,12 @@ GameManager.prototype.setup = function () {
 
 // Set up the initial tiles to start the game with
 GameManager.prototype.addStartTile = function () {
-  this.block = new Tile({ x: 0, y: 3}); // TODO: rename "block" to curCell
-  this.grid.insertTile(this.block);
+  this.curCell = new Tile({ x: 0, y: 3});
+  this.grid.insertTile(this.curCell); // Insert tile also sets its value to 64
 };
 
-GameManager.prototype.addBlock = function(a) {
-    var tile = new Tile({ x: a.x, y: a.y });
+GameManager.prototype.addBlock = function(position) {
+    var tile = new Tile({ x: position.x, y: position.y });
     this.grid.insertTile(tile);
 }
 
@@ -113,25 +113,19 @@ GameManager.prototype.serialize = function () {
   };
 };
 
-// Move a tile and its representation
-GameManager.prototype.moveTile = function (tile, cell) {
-  this.grid.cells[tile.x][tile.y] = null;
-  this.grid.cells[cell.x][cell.y] = tile;
-  tile.updatePosition(cell);
-};
-
 GameManager.prototype.move = function (direction) {
   var self = this;
   
   if (this.isGameTerminated()) return;
   
   var vector     = self.getVector(direction);
-  var positions = self.findFarthestPosition(self.block, vector);
+  var positions = self.findFarthestPosition(self.curCell, vector);
   
   // Check if move is available, otherwise return
+  if (self.positionsEqual(positions.farthest, positions.next)) return;
 
   self.addBlock(positions.farthest);
-  this.block = positions.farthest;
+  this.curCell = positions.farthest;
   
   self.score += 1;
 
