@@ -45,7 +45,7 @@ GameManager.prototype.setup = function () {
   var previousState = this.storageManager.getGameState();
 
   // Reload the game from a previous game if present
-  if (previousState) {
+  if (previousState &&0) {
     this.grid        = new Grid(previousState.grid.size,
                                 previousState.grid.cells); // Reload grid
     this.score       = previousState.score;
@@ -146,11 +146,18 @@ GameManager.prototype.moveTile = function (tile, cell) {
 
 GameManager.prototype.move = function (direction) {
   var self = this;
+  
+  if (this.isGameTerminated()) return;
+  
   var vector     = self.getVector(direction);
   var positions = self.findFarthestPosition(self.block, vector);
+  
+  // Check if move is available, otherwise return
 
   self.addBlock(positions.farthest);
   this.block = positions.farthest;
+  
+  self.score += 1;
 
   if (this.grid.availableCells().length == 0)
       self.won = true;
