@@ -121,21 +121,20 @@ GameManager.prototype.move = function (direction) {
   var vector     = self.getVector(direction);
   var positions = self.findFarthestPosition(self.curCell, vector);
   
-  // Check if move is available, otherwise return - this code doesn't work. Need to halt key press...
   if (positions.farthest.x === self.curCell.x && positions.farthest.y === self.curCell.y)
 	return;
 
   self.addBlock(positions.farthest);
   this.curCell = positions.farthest;
   
-  this.curCell.previousPosition = positions.farthest; // REMOVE... temp
+  this.curCell.previousPosition = positions.farthest; // REMOVE... temp. maybe needed for HTML actuator animation...
   
   self.score += 1;
 
   if (this.grid.availableCells().length == 0)
       self.won = true;
-  if (0)
-	self.over = true
+  else if (!self.anyDirectionAvailable())
+	self.over = true;
 
   this.actuate();
 };
@@ -165,41 +164,20 @@ GameManager.prototype.findFarthestPosition = function (cell, vector) {
 
   return {
     farthest: previous,
-    next: cell // Used to check if a merge is required
+    next: cell // Used to check if a merge is required - REMOVE
   };
 };
 
-GameManager.prototype.movesAvailable = function () {
-  return this.grid.cellsAvailable() || this.tileMatchesAvailable();
-};
-
-// Check for available matches between tiles (more expensive check)
-GameManager.prototype.tileMatchesAvailable = function () {
-  var self = this;
-
-  var tile;
-
-  for (var x = 0; x < this.size; x++) {
-    for (var y = 0; y < this.size; y++) {
-      tile = this.grid.cellContent({ x: x, y: y });
-
-      if (tile) {
-        for (var direction = 0; direction < 2; direction++) {
-          var vector = self.getVector(direction);
-          var cell   = { x: x + vector.x, y: y + vector.y };
-
-          var other  = self.grid.cellContent(cell);
-
-          if (other && other.value === tile.value) {
-            return true; // These two tiles can be merged
-          }
-        }
-      }
-    }
-  }
-
-  return false;
-};
+GameManager.prototype.anyDirectionAvailable = function () {
+	var self = this;
+	for (var direction = 0; direction < 4; direction++) {
+		var vector     = self.getVector(direction);
+		var positions = self.findFarthestPosition(self.curCell, vector);
+		if (positions.farthest.x !== self.curCell.x || positions.farthest.y !== self.curCell.y)
+			return true;
+	}
+	return false;
+}
 
 GameManager.prototype.positionsEqual = function (first, second) {
   return first.x === second.x && first.y === second.y;
