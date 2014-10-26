@@ -70,13 +70,19 @@ GameManager.prototype.setup = function () {
 // Set up the initial tiles to start the game with
 GameManager.prototype.addStartTile = function () {
   this.curCell = new Tile({ x: 0, y: 3});
-  //this.curCell.value = 64; This code keeps the cur cell in its original position. How to change a current cell's position??
+  this.curCell.type = 1;
   this.grid.insertTile(this.curCell);
 };
 
 GameManager.prototype.addBlock = function(position) {
     var tile = new Tile({ x: position.x, y: position.y });
+	tile.type = 0;
     this.grid.insertTile(tile);
+}
+
+GameManager.prototype.moveCurCell = function() {
+	this.grid.cells[self.curCell.x][self.curCell.y].type = 0;
+	this.grid.insertTile(self.curCell);
 }
 
 // Sends the updated grid to the actuator
@@ -129,6 +135,7 @@ GameManager.prototype.move = function (direction) {
 	
 	// Here play move sound
 
+  // This code adds a block in the cur cell position!
   self.addBlock(positions.farthest);
   
   // This code is bug - but works!
@@ -137,6 +144,8 @@ GameManager.prototype.move = function (direction) {
   // This code is OK - but doesn't work!
   //this.curCell.x = positions.farthest.x;
   //this.curCell.y = positions.farthest.y;
+  
+  //this.moveCurCell();
   
   self.score += 1;
 
