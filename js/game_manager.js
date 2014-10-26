@@ -156,18 +156,33 @@ GameManager.prototype.move = function (direction) {
   
   self.score += 1;
 
-  if (this.grid.availableCells().length == 0) {
+  var availableCells = this.grid.availableCells();
+  
+  if (availableCells.length == 0) {
 	
 	self.grid.clearBlockedCells();
+	
+	//self.cantFinishHereGrid[self.curCell.x][self.curCell.x] = 100; // BUGGY
 	
 	// TODO: improve grid-clearing animation + update can't finish here grid + check if game was completed
 	//self.won = true;
   }
-  else if (!self.anyDirectionAvailable()) {
+  else if (!self.anyDirectionAvailable() || self.cantFinishInAvailableCells(availableCells)) {
 	self.over = true;
   }
 
   this.actuate();
+};
+
+GameManager.prototype.cantFinishInAvailableCells = function (availableCells) {
+	for (var i = 0; i < availableCells.length; i++) {
+		var cell = availableCells[i];
+		return false; // REMOVE
+		if (!this.cantFinishHereGrid[cell.x][cell.y]) {
+			return false;
+		}
+	}
+	return true;
 };
 
 // Get the vector representing the chosen direction
