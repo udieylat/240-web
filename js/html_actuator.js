@@ -59,7 +59,7 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   var wrapper   = document.createElement("div");
   var inner     = document.createElement("div");
-  var position  = tile.previousPosition || { x: tile.x, y: tile.y };
+  var position  = { x: tile.x, y: tile.y };
   var positionClass = this.positionClass(position);
 
   // We can't use classlist because it somehow glitches when replacing classes
@@ -72,27 +72,8 @@ HTMLActuator.prototype.addTile = function (tile) {
   inner.classList.add("tile-inner");
 //  inner.textContent = tile.value+1;
 
-  if (tile.previousPosition) {
-    // Make sure that the tile gets rendered in the previous position first
-	var newPosClass = self.positionClass({ x: tile.x, y: tile.y });
-    if (newPosClass !== classes[2]) {
-        window.requestAnimationFrame(function () {
-            classes[2] = newPosClass;
-            self.applyClasses(wrapper, classes); // Update the position
-        });
-    }
-  } else if (tile.mergedFrom) {
-    classes.push("tile-merged");
-    this.applyClasses(wrapper, classes);
-
-    // Render the tiles that merged
-    tile.mergedFrom.forEach(function (merged) {
-      self.addTile(merged);
-    });
-  } else {
-    classes.push("tile-new");
-    this.applyClasses(wrapper, classes);
-  }
+  classes.push("tile-new"); // Change to tile-block
+  this.applyClasses(wrapper, classes);
 
   // Add the inner part of the tile to the wrapper
   wrapper.appendChild(inner);
