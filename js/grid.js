@@ -33,6 +33,16 @@ Grid.prototype.fromState = function (state) {
   return cells;
 };
 
+Grid.prototype.clearBlockedCells  = function () {
+  for (var x = 0; x < this.size; x++) {
+    for (var y = 0; y < this.size; y++) {
+		if (this.cells[x][y].type !== 1) {
+			this.cells[x][y] = null;
+		}
+    }
+  }
+};
+
 Grid.prototype.availableCells = function () {
   var cells = [];
 

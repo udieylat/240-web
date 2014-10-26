@@ -158,9 +158,10 @@ GameManager.prototype.move = function (direction) {
 
   if (this.grid.availableCells().length == 0) {
 	
-	// Here change to level advance
+	self.grid.clearBlockedCells();
 	
-	self.won = true;
+	// TODO: improve grid-clearing animation + update can't finish here grid + check if game was completed
+	//self.won = true;
   }
   else if (!self.anyDirectionAvailable()) {
 	self.over = true;
