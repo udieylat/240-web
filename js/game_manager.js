@@ -48,12 +48,15 @@ GameManager.prototype.setup = function () {
   if (previousState &&0) { // Remove &&0 when ready to use cache again...
     this.grid        = new Grid(previousState.grid.size,
                                 previousState.grid.cells); // Reload grid
+	this.cantFinishHereGrid = new Grid(previousState.grid.size,
+                                previousState.grid.cells);
     this.score       = previousState.score;
     this.over        = previousState.over;
     this.won         = previousState.won;
     this.keepPlaying = previousState.keepPlaying;
   } else {
     this.grid        = new Grid(this.size);
+	this.cantFinishHereGrid        = new Grid(this.size);
     this.score       = 0;
     this.over        = false;
     this.won         = false;
@@ -124,6 +127,7 @@ GameManager.prototype.actuate = function () {
 GameManager.prototype.serialize = function () {
   return {
     grid:        this.grid.serialize(),
+	cantFinishHereGrid:        this.cantFinishHereGrid.serialize(),
     score:       this.score,
     over:        this.over,
     won:         this.won,
@@ -152,10 +156,15 @@ GameManager.prototype.move = function (direction) {
   
   self.score += 1;
 
-  if (this.grid.availableCells().length == 0)
-      self.won = true; // Here change to level advance
-  else if (!self.anyDirectionAvailable())
+  if (this.grid.availableCells().length == 0) {
+	
+	// Here change to level advance
+	
+	self.won = true;
+  }
+  else if (!self.anyDirectionAvailable()) {
 	self.over = true;
+  }
 
   this.actuate();
 };

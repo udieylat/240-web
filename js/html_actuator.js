@@ -67,6 +67,8 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   inner.classList.add("tile-inner");
 
+  //inner.textContent = "v";
+  
   if (tile.type == 2)
 	classes.push("tile-new");
   this.applyClasses(wrapper, classes);
