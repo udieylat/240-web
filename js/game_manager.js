@@ -162,9 +162,9 @@ GameManager.prototype.move = function (direction) {
 	
 	self.grid.clearBlockedCells();
 	
-	//self.cantFinishHereGrid[self.curCell.x][self.curCell.x] = 100; // BUGGY
+	self.cantFinishHereGrid.insertTile(self.curCell);
 	
-	// TODO: improve grid-clearing animation + update can't finish here grid + check if game was completed
+	// TODO: improve grid-clearing animation + update can't finish here grid view + check if game was completed
 	//self.won = true;
   }
   else if (!self.anyDirectionAvailable() || self.cantFinishInAvailableCells(availableCells)) {
@@ -177,8 +177,7 @@ GameManager.prototype.move = function (direction) {
 GameManager.prototype.cantFinishInAvailableCells = function (availableCells) {
 	for (var i = 0; i < availableCells.length; i++) {
 		var cell = availableCells[i];
-		return false; // REMOVE
-		if (!this.cantFinishHereGrid[cell.x][cell.y]) {
+		if (!this.cantFinishHereGrid.cells[cell.x][cell.y]) {
 			return false;
 		}
 	}
