@@ -70,7 +70,8 @@ GameManager.prototype.setup = function () {
 // Set up the initial tiles to start the game with
 GameManager.prototype.addStartTile = function () {
   this.curCell = new Tile({ x: 0, y: 3});
-  this.grid.insertTile(this.curCell); // Insert tile also sets its value to 64
+  //this.curCell.value = 64; This code keeps the cur cell in its original position. How to change a current cell's position??
+  this.grid.insertTile(this.curCell);
 };
 
 GameManager.prototype.addBlock = function(position) {
@@ -167,8 +168,7 @@ GameManager.prototype.findFarthestPosition = function (cell, vector) {
   do {
     previous = cell;
     cell     = { x: previous.x + vector.x, y: previous.y + vector.y };
-  } while (this.grid.withinBounds(cell) &&
-           this.grid.cellAvailable(cell));
+  } while (this.grid.withinBounds(cell) && this.grid.cellAvailable(cell));
 
   return {
     farthest: previous,

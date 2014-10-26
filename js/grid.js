@@ -78,13 +78,6 @@ Grid.prototype.cellContent = function (cell) {
 
 // Inserts a tile at its position
 Grid.prototype.insertTile = function (tile) {
-  for (var x = 0; x < this.size; x++) {
-    for (var y = 0; y < this.size; y++) {
-      if (this.cells[x][y])
-          this.cells[x][y].value = null;
-    }
-  }
-    tile.value = 64;
   this.cells[tile.x][tile.y] = tile;
 };
 
