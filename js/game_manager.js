@@ -80,9 +80,13 @@ GameManager.prototype.addBlock = function(position) {
     this.grid.insertTile(tile);
 }
 
-GameManager.prototype.moveCurCell = function() {
-	this.grid.cells[self.curCell.x][self.curCell.y].type = 0;
-	this.grid.insertTile(self.curCell);
+GameManager.prototype.moveCurCellAndAddBlockedCell = function(position) {  
+  this.addBlock({ x: this.curCell.x, y: this.curCell.y });
+
+  this.curCell.x = position.x;
+  this.curCell.y = position.y;
+  
+  this.grid.insertTile(this.curCell);
 }
 
 // Sends the updated grid to the actuator
@@ -132,20 +136,12 @@ GameManager.prototype.move = function (direction) {
     // Here play can't move sound
 	return;
 	}
-	
+
+
 	// Here play move sound
 
-  // This code adds a block in the cur cell position!
-  self.addBlock(positions.farthest);
-  
-  // This code is bug - but works!
-  this.curCell = positions.farthest;
-  
-  // This code is OK - but doesn't work!
-  //this.curCell.x = positions.farthest.x;
-  //this.curCell.y = positions.farthest.y;
-  
-  //this.moveCurCell();
+	
+  self.moveCurCellAndAddBlockedCell(positions.farthest);
   
   self.score += 1;
 
