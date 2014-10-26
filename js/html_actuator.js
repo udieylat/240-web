@@ -67,7 +67,8 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   inner.classList.add("tile-inner");
 
-  classes.push("tile-new"); // Change to tile-block
+  if (tile.type == 2)
+	classes.push("tile-new");
   this.applyClasses(wrapper, classes);
 
   // Add the inner part of the tile to the wrapper

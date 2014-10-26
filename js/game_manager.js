@@ -76,11 +76,18 @@ GameManager.prototype.addStartTile = function () {
 
 GameManager.prototype.addBlock = function(position) {
     var tile = new Tile({ x: position.x, y: position.y });
-	tile.type = 0;
+	tile.type = 2;
     this.grid.insertTile(tile);
 }
 
-GameManager.prototype.moveCurCellAndAddBlockedCell = function(position) {  
+GameManager.prototype.moveCurCellAndAddBlockedCell = function(position) {
+
+  this.grid.eachCell(function (x, y, tile) {
+    if (tile && tile.type == 2) {
+      tile.type = 0;
+    }
+  });
+  
   this.addBlock({ x: this.curCell.x, y: this.curCell.y });
 
   this.curCell.x = position.x;
