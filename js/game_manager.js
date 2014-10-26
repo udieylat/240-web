@@ -121,18 +121,26 @@ GameManager.prototype.move = function (direction) {
   var vector     = self.getVector(direction);
   var positions = self.findFarthestPosition(self.curCell, vector);
   
-  if (positions.farthest.x === self.curCell.x && positions.farthest.y === self.curCell.y)
+  if (positions.farthest.x === self.curCell.x && positions.farthest.y === self.curCell.y) {
+    // Here play can't move sound
 	return;
+	}
+	
+	// Here play move sound
 
   self.addBlock(positions.farthest);
+  
+  // This code is bug - but works!
   this.curCell = positions.farthest;
   
-  this.curCell.previousPosition = positions.farthest; // REMOVE... temp. maybe needed for HTML actuator animation...
+  // This code is OK - but doesn't work!
+  //this.curCell.x = positions.farthest.x;
+  //this.curCell.y = positions.farthest.y;
   
   self.score += 1;
 
   if (this.grid.availableCells().length == 0)
-      self.won = true;
+      self.won = true; // Here change to level advance
   else if (!self.anyDirectionAvailable())
 	self.over = true;
 
